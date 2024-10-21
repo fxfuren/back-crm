@@ -19,7 +19,7 @@ services:
     image: redis:5.0
     restart: always
     environment:
-      - REDIS_USER='redis'
+      - REDIS_USER=${REDIS_USER}
       - REDIS_PASSWORD=${REDIS_PASSWORD}
     ports:
       - 6380:6379
