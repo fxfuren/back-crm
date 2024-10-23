@@ -9,14 +9,14 @@ import { ConfigService } from '@nestjs/config';
 import { verify } from 'argon2';
 import { Request, Response } from 'express';
 import { AuthMethod, User } from 'prisma/__generated__';
-import { UserSevice } from 'src/user/user.service';
+import { UserService } from 'src/user/user.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 
 @Injectable()
 export class AuthService {
   public constructor(
-    private readonly userService: UserSevice,
+    private readonly userService: UserService,
     private readonly configService: ConfigService,
   ) {}
 
