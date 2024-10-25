@@ -8,7 +8,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { verify } from 'argon2';
 import { Request, Response } from 'express';
-import { AuthMethod, User } from 'prisma/__generated__';
+import { User } from 'prisma/__generated__';
 import { UserService } from 'src/user/user.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
@@ -30,7 +30,6 @@ export class AuthService {
       dto.password,
       dto.name,
       '',
-      AuthMethod.CREDENTIALS,
       false,
     );
 
