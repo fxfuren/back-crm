@@ -27,7 +27,7 @@ async function bootstrap() {
     session({
       secret: config.getOrThrow<string>('SESSION_SECRET'),
       name: config.getOrThrow<string>('SESSION_NAME'),
-      resave: false,
+      resave: true,
       saveUninitialized: false,
       cookie: {
         domain: config.getOrThrow<string>('SESSION_DOMAIN'),
@@ -44,7 +44,7 @@ async function bootstrap() {
   );
 
   app.enableCors({
-    origin: config.getOrThrow<string>('ALLOWED_ORIGINS'),
+    origin: config.getOrThrow<string>('ALLOWED_ORIGIN'),
     credentials: true,
     exposedHeaders: ['set-cookie'],
   });
