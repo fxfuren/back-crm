@@ -21,4 +21,11 @@ export class UserController {
   public async findById(@Param('id') id: string) {
     return this.userService.findById(id);
   }
+
+  @Authorization()
+  @HttpCode(HttpStatus.OK)
+  @Get('')
+  public async allUser() {
+    return this.userService.allUser();
+  }
 }
