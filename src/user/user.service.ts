@@ -1,11 +1,15 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { hash } from 'argon2';
-import { AuthMethod } from 'prisma/__generated__';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class UserService {
   public constructor(private readonly prismaService: PrismaService) {}
+
+  public async allUser() {
+    const user = await this.prismaService.user.findMany({});
+    return user;
+  }
 
   public async findById(id: string) {
     const user = await this.prismaService.user.findUnique({
@@ -38,7 +42,6 @@ export class UserService {
     password: string,
     displayName: string,
     picture: string,
-    method: AuthMethod,
     isVerified: boolean,
   ) {
     const user = await this.prismaService.user.create({
@@ -47,7 +50,6 @@ export class UserService {
         password: password ? await hash(password) : '',
         displayName,
         picture,
-        method,
         isVerified,
       },
       include: {

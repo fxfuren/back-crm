@@ -8,16 +8,18 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { verify } from 'argon2';
 import { Request, Response } from 'express';
-import { AuthMethod, User } from 'prisma/__generated__';
+import { User } from 'prisma/__generated__';
 import { UserService } from 'src/user/user.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
+import { EmailConfirmationService } from './email-confirmation/email-confirmation.service';
 
 @Injectable()
 export class AuthService {
   public constructor(
     private readonly userService: UserService,
     private readonly configService: ConfigService,
+    private readonly emailConfirmationService: EmailConfirmationService,
   ) {}
 
   public async register(req: Request, dto: RegisterDto) {
@@ -30,11 +32,15 @@ export class AuthService {
       dto.password,
       dto.name,
       '',
-      AuthMethod.CREDENTIALS,
       false,
     );
 
-    return this.saveSession(req, newUser);
+    await this.emailConfirmationService.sendVerificationToken(newUser.email);
+
+    return {
+      message:
+        'Вы успешно зарегистрировались. Пожалуйста, подтвердите ваш email. Сообщение было отправлено на ваш почтовый адрес.',
+    };
   }
 
   public async login(req: Request, dto: LoginDto) {
@@ -48,6 +54,13 @@ export class AuthService {
 
     if (!isValidPassword) {
       throw new UnauthorizedException('Wrong Password');
+    }
+
+    if (!user.isVerified) {
+      await this.emailConfirmationService.sendVerificationToken(user.email);
+      throw new UnauthorizedException(
+        'Ваш email не подтвержден. Пожалуйста, проверьте вашу почту и подтвердите адрес.',
+      );
     }
 
     return this.saveSession(req, user);
@@ -69,7 +82,7 @@ export class AuthService {
     });
   }
 
-  private async saveSession(req: Request, user: User) {
+  public async saveSession(req: Request, user: User) {
     return new Promise((resolve, reject) => {
       req.session.userId = user.id;
 
