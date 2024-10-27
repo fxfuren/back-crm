@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   InternalServerErrorException,
@@ -8,7 +9,8 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { verify } from 'argon2';
 import { Request, Response } from 'express';
-import { User } from 'prisma/__generated__';
+import { TokenType, User } from 'prisma/__generated__';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { UserService } from 'src/user/user.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
@@ -20,20 +22,41 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly configService: ConfigService,
     private readonly emailConfirmationService: EmailConfirmationService,
+    private readonly prismaService: PrismaService,
   ) {}
 
-  public async register(req: Request, dto: RegisterDto) {
+  public async register(req: Request, dto: RegisterDto, inviteToken: string) {
+    const tokenRecord = await this.prismaService.token.findFirst({
+      where: {
+        token: inviteToken,
+        expiresIn: {
+          gte: new Date(),
+        },
+        type: TokenType.INVITE,
+      },
+    });
+
+    if (!tokenRecord) {
+      throw new BadRequestException('Invalid or expired invite token');
+    }
+
     const isExists = await this.userService.findByEmail(dto.email);
     if (isExists) {
       throw new ConflictException('Email is already exists');
     }
+
     const newUser = await this.userService.create(
       dto.email,
       dto.password,
       dto.name,
-      '',
       false,
     );
+
+    await this.prismaService.token.delete({
+      where: {
+        id: tokenRecord.id,
+      },
+    });
 
     await this.emailConfirmationService.sendVerificationToken(newUser.email);
 
