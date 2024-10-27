@@ -1,4 +1,11 @@
-import { Controller, Get, HttpCode, HttpStatus, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Post,
+} from '@nestjs/common';
 import { UserRole } from 'prisma/__generated__';
 import { Authorization } from 'src/auth/decorators/auth.decorator';
 import { Authorized } from 'src/auth/decorators/authorized.decorator';
@@ -27,5 +34,12 @@ export class UserController {
   @Get('')
   public async allUser() {
     return this.userService.allUser();
+  }
+
+  @Authorization(UserRole.ADMIN)
+  @Post('new')
+  @HttpCode(HttpStatus.OK)
+  public async genInvite(@Authorized('email') adminEmail: string) {
+    return this.userService.genInvite(adminEmail);
   }
 }
