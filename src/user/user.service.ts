@@ -14,9 +14,6 @@ export class UserService {
   public async findById(id: string) {
     const user = await this.prismaService.user.findUnique({
       where: { id },
-      include: {
-        accounts: true,
-      },
     });
 
     if (!user) {
@@ -29,9 +26,6 @@ export class UserService {
   public async findByEmail(email: string) {
     const user = await this.prismaService.user.findUnique({
       where: { email },
-      include: {
-        accounts: true,
-      },
     });
 
     return user;
@@ -49,11 +43,7 @@ export class UserService {
         email,
         password: password ? await hash(password) : '',
         displayName,
-        picture,
         isVerified,
-      },
-      include: {
-        accounts: true,
       },
     });
 
