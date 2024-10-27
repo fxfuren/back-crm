@@ -4,6 +4,7 @@ import {
   HttpCode,
   HttpStatus,
   Post,
+  Query,
   Req,
   Res,
 } from '@nestjs/common';
@@ -20,8 +21,12 @@ export class AuthController {
   @Recaptcha()
   @Post('register')
   @HttpCode(HttpStatus.OK)
-  public async register(@Req() req: Request, @Body() dto: RegisterDto) {
-    return this.authService.register(req, dto);
+  public async register(
+    @Req() req: Request,
+    @Body() dto: RegisterDto,
+    @Query('inviteToken') inviteToken: string,
+  ) {
+    return this.authService.register(req, dto, inviteToken);
   }
 
   @Recaptcha()
