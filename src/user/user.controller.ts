@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Get,
   HttpCode,
@@ -41,5 +42,16 @@ export class UserController {
   @HttpCode(HttpStatus.OK)
   public async genInvite(@Authorized('email') adminEmail: string) {
     return this.userService.genInvite(adminEmail);
+  }
+
+  @Authorization(UserRole.ADMIN)
+  @Post(':id/role')
+  @HttpCode(HttpStatus.OK)
+  public async updateRole(
+    @Authorized('id') requesterId: string,
+    @Param('id') id: string,
+    @Body('role') role: UserRole,
+  ) {
+    return this.userService.updateRole(requesterId, id, role);
   }
 }
