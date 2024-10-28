@@ -1,14 +1,17 @@
 import {
+  Body,
   Controller,
   Get,
   HttpCode,
   HttpStatus,
   Param,
+  Patch,
   Post,
 } from '@nestjs/common';
 import { UserRole } from 'prisma/__generated__';
 import { Authorization } from 'src/auth/decorators/auth.decorator';
 import { Authorized } from 'src/auth/decorators/authorized.decorator';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { UserService } from './user.service';
 
 @Controller('users')
@@ -41,5 +44,26 @@ export class UserController {
   @HttpCode(HttpStatus.OK)
   public async genInvite(@Authorized('email') adminEmail: string) {
     return this.userService.genInvite(adminEmail);
+  }
+
+  @Authorization(UserRole.ADMIN)
+  @Post(':id/role')
+  @HttpCode(HttpStatus.OK)
+  public async updateRole(
+    @Authorized('id') requesterId: string,
+    @Param('id') id: string,
+    @Body('role') role: UserRole,
+  ) {
+    return this.userService.updateRole(requesterId, id, role);
+  }
+
+  @Authorization()
+  @HttpCode(HttpStatus.OK)
+  @Patch('profile')
+  public async updateProfile(
+    @Authorized('id') userId: string,
+    @Body() dto: UpdateUserDto,
+  ) {
+    return this.userService.update(userId, dto);
   }
 }

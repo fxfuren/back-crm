@@ -1,8 +1,13 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { hash } from 'argon2';
-import { TokenType } from 'prisma/__generated__';
+import { TokenType, UserRole } from 'prisma/__generated__';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { v4 as uuidv4 } from 'uuid';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -49,6 +54,23 @@ export class UserService {
     return user;
   }
 
+  public async updateRole(requesterId: string, id: string, newRole: UserRole) {
+    const user = await this.findById(id);
+    if (user.role === newRole) {
+      throw new ConflictException('User role is already the same');
+    }
+
+    if (requesterId === id) {
+      throw new ConflictException('You cannot change your own role');
+    }
+    const updatedUser = await this.prismaService.user.update({
+      where: { id },
+      data: { role: newRole },
+    });
+
+    return updatedUser;
+  }
+
   public async create(
     email: string,
     password: string,
@@ -65,5 +87,22 @@ export class UserService {
     });
 
     return user;
+  }
+
+  public async update(userId: string, dto: UpdateUserDto) {
+    const user = await this.findById(userId);
+
+    const updatedUser = await this.prismaService.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        email: dto.email,
+        displayName: dto.name,
+        isTwoFactorEnabled: dto.isTwoFactorEnabled,
+      },
+    });
+
+    return updatedUser;
   }
 }
