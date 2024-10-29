@@ -23,6 +23,7 @@ model User {
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
+  Order     Order[]
 
   @@map("users")
 }
@@ -38,6 +39,53 @@ model Token {
   createdAt DateTime @default(now()) @map("created_at")
 
   @@map("tokens")
+}
+
+model Warehouse {
+  id       String  @id @default(uuid())
+  name     String
+  location String?
+  items    Item[]  @relation("WarehouseItems")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("warehouses")
+}
+
+model Order {
+  id           String      @id @default(uuid())
+  customer     String
+  device       String
+  issue        String
+  technician   User        @relation(fields: [technicianId], references: [id])
+  technicianId String
+  status       OrderStatus @default(COMPLETED)
+
+  createdAt   DateTime @default(now()) @map("created_at")
+  completedAt DateTime @map("completed_at")
+
+  @@map("completed_orders")
+}
+
+model Item {
+  id          String    @id @default(uuid())
+  name        String
+  quantity    Int       @default(0)
+  warehouse   Warehouse @relation("WarehouseItems", fields: [warehouseId], references: [id])
+  warehouseId String
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("items")
+}
+
+enum OrderStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
 }
 
 enum UserRole {
