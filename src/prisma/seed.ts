@@ -1,5 +1,5 @@
 import { hash } from 'argon2';
-import { PrismaClient } from './__generated__';
+import { PrismaClient } from '../../prisma/__generated__';
 
 const prismaService = new PrismaClient();
 
