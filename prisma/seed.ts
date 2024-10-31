@@ -1,9 +1,9 @@
 import { hash } from 'argon2';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaClient } from './__generated__';
+
+const prismaService = new PrismaClient();
 
 async function main() {
-  const prismaService = new PrismaService();
-
   const adminExists = await prismaService.user.findUnique({
     where: { email: 'admin@example.com' },
   });
@@ -36,8 +36,6 @@ async function main() {
     console.log('Warehouse already exists');
   }
 }
-
-const prismaService = new PrismaService();
 
 main()
   .catch((e) => {
