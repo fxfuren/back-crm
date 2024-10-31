@@ -24,25 +24,42 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+This backend API for my pet-project <strong>crm-app</strong>. It's built with NestJS framework.
+
+## Docker-compose setup
+
+To run the application with Docker-compose, you need to have Docker and Docker-compose installed on your machine
+
+```bash
+$ docker-compose up
+# or
+$ docker compose up
+```
 
 ## Project setup
 
 ```bash
-$ pnpm install
+# install packeges
+$ bun install
+
+# generate prisma __generate__
+$ bunx prisma generate
+
+# first initilization data in db when docker is running
+$ bun seed
 ```
 
 ## Compile and run the project
 
 ```bash
 # development
-$ pnpm run start
+$ bun start
 
 # watch mode
-$ pnpm run start:dev
+$ bun start:dev
 
 # production mode
-$ pnpm run start:prod
+$ bun start:prod
 ```
 
 ## Run tests

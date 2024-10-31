@@ -7,7 +7,8 @@ import { IS_DEV_ENV } from './libs/common/utils/is-dev.util';
 import { MailModule } from './libs/mail/mail.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { UserModule } from './user/user.module';
-
+import { ItemsModule } from './warehouses/items/items.module';
+import { WarehousesModule } from './warehouses/warehouses.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -20,6 +21,8 @@ import { UserModule } from './user/user.module';
     MailModule,
     EmailConfirmationModule,
     PasswordRecoveryModule,
+    WarehousesModule,
+    ItemsModule,
   ],
 })
 export class AppModule {}
