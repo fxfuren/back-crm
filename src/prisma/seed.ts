@@ -12,7 +12,7 @@ async function main() {
     await prismaService.user.create({
       data: {
         email: 'admin@example.com',
-        password: await hash('admin'),
+        password: await hash('(Admin123)'),
         displayName: 'Admin',
         role: 'ADMIN',
         isVerified: true,
