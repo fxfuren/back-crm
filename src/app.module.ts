@@ -9,6 +9,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { UserModule } from './user/user.module';
 import { ItemsModule } from './warehouses/items/items.module';
 import { WarehousesModule } from './warehouses/warehouses.module';
+import { OrderModule } from './order/order.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -23,6 +24,7 @@ import { WarehousesModule } from './warehouses/warehouses.module';
     PasswordRecoveryModule,
     WarehousesModule,
     ItemsModule,
+    OrderModule,
   ],
 })
 export class AppModule {}
