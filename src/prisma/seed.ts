@@ -1,5 +1,5 @@
 import { hash } from 'argon2';
-import { PrismaClient } from './__generated__';
+import { PrismaClient } from '../../prisma/__generated__';
 
 const prismaService = new PrismaClient();
 
@@ -12,7 +12,7 @@ async function main() {
     await prismaService.user.create({
       data: {
         email: 'admin@example.com',
-        password: await hash('admin'),
+        password: await hash('(Admin123)'),
         displayName: 'Admin',
         role: 'ADMIN',
         isVerified: true,
