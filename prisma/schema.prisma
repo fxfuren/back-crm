@@ -18,8 +18,7 @@ model User {
 
   role UserRole @default(REGULAR)
 
-  isVerified         Boolean @default(false) @map("is_verified")
-  isTwoFactorEnabled Boolean @default(false) @map("is_two_factor_enabled")
+  isVerified Boolean @default(false) @map("is_verified")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")

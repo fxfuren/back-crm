@@ -1,4 +1,4 @@
-import { IsBoolean, IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
 /**
  * DTO для обновления данных пользователя.
@@ -20,10 +20,4 @@ export class UpdateUserDto {
   @IsEmail({}, { message: 'Некорректный формат email.' })
   @IsNotEmpty({ message: 'Email обязателен для заполнения.' })
   email: string;
-
-  /**
-   * Флаг, указывающий, включена ли двухфакторная аутентификация.
-   */
-  @IsBoolean({ message: 'isTwoFactorEnabled должно быть булевым значением.' })
-  isTwoFactorEnabled: boolean;
 }
