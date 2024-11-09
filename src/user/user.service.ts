@@ -19,6 +19,16 @@ export class UserService {
   }
 
   public async genInvite(adminEmail: string) {
+    const existingToken = await this.prismaService.token.findFirst({
+      where: { email: adminEmail, type: TokenType.INVITE },
+    });
+
+    if (existingToken) {
+      await this.prismaService.token.delete({
+        where: { id: existingToken.id },
+      });
+    }
+
     const token = uuidv4();
     const expiresIn = new Date(new Date().getTime() + 86400 * 1000);
 
