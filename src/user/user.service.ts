@@ -34,6 +34,22 @@ export class UserService {
     return inviteToken;
   }
 
+  public async getInviteTokens(userId: string) {
+    const user = await this.prismaService.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const inviteTokens = await this.prismaService.token.findMany({
+      where: { email: user.email, type: TokenType.INVITE },
+    });
+
+    return inviteTokens;
+  }
+
   public async findById(id: string) {
     const user = await this.prismaService.user.findUnique({
       where: { id },

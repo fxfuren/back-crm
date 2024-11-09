@@ -47,6 +47,13 @@ export class UserController {
   }
 
   @Authorization(UserRole.ADMIN)
+  @HttpCode(HttpStatus.OK)
+  @Get('invite-tokens')
+  public async getInviteTokens(@Authorized('id') id: string) {
+    return this.userService.getInviteTokens(id);
+  }
+
+  @Authorization(UserRole.ADMIN)
   @Post(':id/role')
   @HttpCode(HttpStatus.OK)
   public async updateRole(
