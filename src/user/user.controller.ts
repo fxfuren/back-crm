@@ -54,7 +54,7 @@ export class UserController {
   }
 
   @Authorization(UserRole.ADMIN)
-  @Post(':id/role')
+  @Patch(':id/role')
   @HttpCode(HttpStatus.OK)
   public async updateRole(
     @Authorized('id') requesterId: string,
