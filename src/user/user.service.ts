@@ -19,6 +19,16 @@ export class UserService {
   }
 
   public async genInvite(adminEmail: string) {
+    const existingToken = await this.prismaService.token.findFirst({
+      where: { email: adminEmail, type: TokenType.INVITE },
+    });
+
+    if (existingToken) {
+      await this.prismaService.token.delete({
+        where: { id: existingToken.id },
+      });
+    }
+
     const token = uuidv4();
     const expiresIn = new Date(new Date().getTime() + 86400 * 1000);
 
@@ -32,6 +42,22 @@ export class UserService {
     });
 
     return inviteToken;
+  }
+
+  public async getInviteTokens(userId: string) {
+    const user = await this.prismaService.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const inviteTokens = await this.prismaService.token.findMany({
+      where: { email: user.email, type: TokenType.INVITE },
+    });
+
+    return inviteTokens;
   }
 
   public async findById(id: string) {
@@ -99,7 +125,6 @@ export class UserService {
       data: {
         email: dto.email,
         displayName: dto.name,
-        isTwoFactorEnabled: dto.isTwoFactorEnabled,
       },
     });
 
