@@ -1,4 +1,4 @@
-import { IsDate, IsEnum, IsOptional, IsString } from 'class-validator';
+import { IsDateString, IsEnum, IsOptional, IsString } from 'class-validator';
 import { OrderStatus } from 'prisma/__generated__';
 
 export class UpdateOrderDto {
@@ -19,6 +19,6 @@ export class UpdateOrderDto {
   status?: OrderStatus;
 
   @IsOptional()
-  @IsDate()
+  @IsDateString()
   completedAt?: Date;
 }
