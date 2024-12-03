@@ -71,6 +71,7 @@ model Item {
   id          String    @id @default(uuid())
   name        String
   quantity    Int       @default(0)
+  price       Decimal?  @db.Decimal(10, 2)
   warehouse   Warehouse @relation("WarehouseItems", fields: [warehouseId], references: [id])
   warehouseId String
 
