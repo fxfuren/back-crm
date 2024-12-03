@@ -1,4 +1,11 @@
-import { IsInt, IsString, IsUUID, Min } from 'class-validator';
+import {
+  IsDecimal,
+  IsInt,
+  IsOptional,
+  IsString,
+  IsUUID,
+  Min,
+} from 'class-validator';
 
 export class CreateItemDto {
   @IsString({ message: 'Название должно быть строкой.' })
@@ -10,4 +17,8 @@ export class CreateItemDto {
 
   @IsUUID()
   warehouseId: string;
+
+  @IsDecimal()
+  @IsOptional()
+  price?: string;
 }
