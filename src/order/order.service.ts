@@ -30,7 +30,8 @@ export class OrdersService {
   }
 
   public async addOrder(createOrderDto: CreateOrderDto) {
-    const { customer, device, issue, technicianId, status } = createOrderDto;
+    const { customer, device, issue, technicianId, status, price } =
+      createOrderDto;
 
     const technicianExists = await this.prismaService.user.findUnique({
       where: { id: technicianId },
@@ -45,6 +46,7 @@ export class OrdersService {
         customer,
         device,
         issue,
+        price,
         technician: { connect: { id: technicianId } },
         status,
         completedAt: null,
