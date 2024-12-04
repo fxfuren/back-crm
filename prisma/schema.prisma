@@ -9,45 +9,37 @@ datasource db {
 }
 
 model User {
-  id String @id @default(uuid())
-
-  email    String @unique
-  password String
-
+  id          String   @id @default(uuid())
+  email       String   @unique
+  password    String
   displayName String
-
-  role UserRole @default(REGULAR)
-
-  isVerified Boolean @default(false) @map("is_verified")
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  Order     Order[]
+  role        UserRole @default(REGULAR)
+  isVerified  Boolean  @default(false) @map("is_verified")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  Order       Order[]
 
   @@map("users")
 }
 
 model Token {
-  id String @id @default(uuid())
-
+  id        String    @id @default(uuid())
   email     String
   token     String    @unique
   type      TokenType
   expiresIn DateTime  @map("expires_in")
-
-  createdAt DateTime @default(now()) @map("created_at")
+  createdAt DateTime  @default(now()) @map("created_at")
 
   @@map("tokens")
 }
 
 model Warehouse {
-  id       String  @id @default(uuid())
-  name     String
-  location String?
-  items    Item[]  @relation("WarehouseItems")
-
+  id        String   @id @default(uuid())
+  name      String
+  location  String?
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
+  items     Item[]   @relation("WarehouseItems")
 
   @@map("warehouses")
 }
@@ -57,12 +49,12 @@ model Order {
   customer     String
   device       String
   issue        String
-  technician   User        @relation(fields: [technicianId], references: [id])
   technicianId String
   status       OrderStatus @default(COMPLETED)
-
-  createdAt   DateTime  @default(now()) @map("created_at")
-  completedAt DateTime? @map("completed_at")
+  createdAt    DateTime    @default(now()) @map("created_at")
+  completedAt  DateTime?   @map("completed_at")
+  price        Decimal?    @db.Decimal(10, 2)
+  technician   User        @relation(fields: [technicianId], references: [id])
 
   @@map("completed_orders")
 }
@@ -71,11 +63,12 @@ model Item {
   id          String    @id @default(uuid())
   name        String
   quantity    Int       @default(0)
-  warehouse   Warehouse @relation("WarehouseItems", fields: [warehouseId], references: [id])
   warehouseId String
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  price       Decimal?  @db.Decimal(10, 2)
+  description String?
+  warehouse   Warehouse @relation("WarehouseItems", fields: [warehouseId], references: [id])
 
   @@map("items")
 }

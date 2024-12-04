@@ -26,9 +26,8 @@ export class ItemsService {
   }
 
   public async addItem(createItemDto: CreateItemDto) {
-    const { name, quantity, warehouseId } = createItemDto;
     return await this.prismaService.item.create({
-      data: { name, quantity, warehouseId },
+      data: createItemDto,
     });
   }
 

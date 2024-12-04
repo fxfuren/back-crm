@@ -1,4 +1,4 @@
-import { IsEnum, IsOptional, IsString } from 'class-validator';
+import { IsDecimal, IsEnum, IsOptional, IsString } from 'class-validator';
 import { OrderStatus } from 'prisma/__generated__';
 
 export class CreateOrderDto {
@@ -17,4 +17,8 @@ export class CreateOrderDto {
   @IsOptional()
   @IsEnum(OrderStatus)
   status?: OrderStatus;
+
+  @IsDecimal()
+  @IsOptional()
+  price?: string;
 }
