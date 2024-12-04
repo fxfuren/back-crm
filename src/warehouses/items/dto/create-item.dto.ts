@@ -21,4 +21,8 @@ export class CreateItemDto {
   @IsDecimal()
   @IsOptional()
   price?: string;
+
+  @IsString()
+  @IsOptional()
+  description?: string;
 }

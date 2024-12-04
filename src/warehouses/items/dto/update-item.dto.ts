@@ -13,4 +13,8 @@ export class UpdateItemDto {
   @IsDecimal()
   @IsOptional()
   price?: string;
+
+  @IsString()
+  @IsOptional()
+  description?: string;
 }
