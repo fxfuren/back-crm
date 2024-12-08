@@ -11,6 +11,8 @@ RUN npm install
 COPY . .
 # Генерируем Prisma
 RUN npx prisma generate
+# Генерируем Prisma
+RUN npx prisma db push
 # Генерируем базовые данные в бд 
 RUN npm run seed
 
