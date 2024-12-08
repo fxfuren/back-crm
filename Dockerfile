@@ -6,16 +6,16 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 # Устанавливаем зависимости
-RUN bun install
+RUN npm install
 # Копируем остальные файлы проекта
 COPY . .
 # Генерируем Prisma
-RUN bunx prisma generate
+RUN npx prisma generate
 # Генерируем базовые данные в бд 
-RUN bun seed
+RUN npm run seed
 
 # Указываем команду для запуска приложения
-CMD ["bun", "start:prod"]
+CMD ["npm", "run", "start:prod"]
 
 # Открываем порт, на котором будет работать приложение
 EXPOSE 4000
