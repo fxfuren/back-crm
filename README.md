@@ -40,13 +40,16 @@ $ docker compose up
 
 ```bash
 # install packeges
-$ bun install
+bun install
 
 # generate prisma __generate__
-$ bunx prisma generate
+bunx prisma generate
+
+# push data on database
+npx prisma db push
 
 # first initilization data in db when docker is running
-$ bun seed
+bun seed
 ```
 
 ## Compile and run the project
